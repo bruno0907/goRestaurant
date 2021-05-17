@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 
 import { Header } from '../../components/Header';
-import api from '../../services/api';
 import { FoodCard } from '../../components/FoodCard';
 import { ModalAddFood } from '../../components/ModalAddFood';
 import { ModalEditFood } from '../../components/ModalEditFood';
+
+import api from '../../services/api';
+
 import { FoodsContainer } from './styles';
 
 interface FoodProps{
@@ -17,10 +19,11 @@ interface FoodProps{
 }
 
 function Dashboard(){
-  const [modalOpen, setModalOpen] = useState(false)
+  const [addFoodModalOpen, setAddFoodModalOpen] = useState(false)
+  const [editFoodModalOpen, setEditFoodModalOpen] = useState(false)
   const [foods, setFoods] = useState<FoodProps[]>([])
   const [editingFood, setEditingFood] = useState<FoodProps>()
-  const [editModalOpen, setEditModalOpen] = useState(false)
+  
   
   useEffect(() => {
     async function getFoods(){
@@ -30,9 +33,22 @@ function Dashboard(){
     }
     getFoods()
 
-  }, [])
+  }, [])  
 
-  const handleAddFood = async(food: FoodProps) => {
+  function toggleAddFoodModal(){
+    setAddFoodModalOpen(prevState => !prevState)    
+  }
+
+  function toggleEditFoodModal(){
+    setEditFoodModalOpen(prevState => !prevState)
+  }
+
+  function handleEditFood(food: FoodProps){
+    setEditingFood(food)    
+    toggleEditFoodModal()
+  }
+
+  async function handleAddFood(food: FoodProps){
     try {
       const response = await api.post('/foods', {
         ...food,
@@ -45,7 +61,7 @@ function Dashboard(){
     }
   }
 
-  const handleUpdateFood = async (food: FoodProps) => {       
+  async function handleUpdateFood(food: FoodProps){       
     try {
       const foodUpdated = await api.put(
         `/foods/${editingFood?.id}`,
@@ -62,32 +78,23 @@ function Dashboard(){
     }
   }
 
-  const handleDeleteFood = async (id: number) => {    
+  async function handleDeleteFood(id: number){    
     await api.delete(`/foods/${id}`);
     const foodsFiltered = foods.filter(food => food.id !== id);
     setFoods(foodsFiltered);
   }
 
-  const toggleModal = () => setModalOpen(prevState => !prevState)  
-
-  const toggleEditModal = () => setEditModalOpen(prevState => !prevState)
-
-  const handleEditFood = (food: FoodProps) => {
-    setEditingFood(food)
-    setEditModalOpen(prevState => !prevState)
-  }
-
   return(
     <>
-      <Header openModal={toggleModal} />
+      <Header openModal={toggleAddFoodModal} />
       <ModalAddFood
-        isOpen={modalOpen}
-        setIsOpen={toggleModal}
+        isOpen={addFoodModalOpen}
+        setIsOpen={toggleAddFoodModal}
         handleAddFood={handleAddFood}
       />
       <ModalEditFood
-        isOpen={editModalOpen}
-        setIsOpen={toggleEditModal}
+        isOpen={editFoodModalOpen}
+        setIsOpen={toggleEditFoodModal}
         editingFood={editingFood}
         handleUpdateFood={handleUpdateFood}
       />

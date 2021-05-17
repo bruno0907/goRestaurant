@@ -1,11 +1,11 @@
 import styled, { css } from 'styled-components';
 
-interface ContainerProps{
+interface InputContainerProps{
   isFocused: boolean;
   isFilled: boolean;
 }
 
-export const Container = styled.div<ContainerProps>`
+export const Container = styled.div<InputContainerProps>`
   display: flex;
   align-items: center;
 
@@ -26,15 +26,15 @@ export const Container = styled.div<ContainerProps>`
     line-height: 36px;
   }
 
-  ${props =>
-    props.isFocused &&
+  ${({ isFocused }) =>
+    isFocused &&
     css`
       color: #ff9000;
       border-color: #ff9000;
     `}
 
-  ${props =>
-    props.isFilled &&
+  ${({ isFilled }) =>
+    isFilled &&
     css`
       color: #ff9000;
     `}
