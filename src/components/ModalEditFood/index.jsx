@@ -1,11 +1,17 @@
 import { useRef } from 'react';
 import { FiCheckSquare } from 'react-icons/fi';
 
-import { Form } from './styles';
+import { useFood } from '../../hooks/useFood'
+
 import { Modal } from '../Modal';
 import { Input } from '../Input';
+import { Form } from './styles';
 
-function ModalEditFood({ isOpen, setIsOpen, handleUpdateFood, editingFood }) {
+function ModalEditFood({ isOpen, setIsOpen }) {
+  const { 
+    handleUpdateFood,
+    editingFood 
+  } = useFood()
   const formRef = useRef(null)
 
   const handleSubmit = async (data) => {
