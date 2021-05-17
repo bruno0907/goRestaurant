@@ -8,4 +8,4 @@ const Routes = () => (
   </Switch>
 );
 
-export default Routes;
+export { Routes };
