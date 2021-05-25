@@ -7,6 +7,4 @@ interface FoodProps{
   available: boolean;
 }
 
-interface A{}
-
-export type { FoodProps, A }
+export type { FoodProps }
